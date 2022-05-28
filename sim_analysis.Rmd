@@ -1,0 +1,274 @@
+---
+title: "simAnalysis"
+author: "Nikhiel Ramraj"
+date: "27/05/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+
+```
+
+
+```{r}
+source("trd_signal_extractor.R")
+source("viz_tools.R")
+```
+
+
+```{r}
+# Read in the data 
+sim_data <- read.csv("digits_data_mcm.csv")
+```
+
+```{r}
+raw_data <- read.csv("digits_data_mcm.csv")
+```
+
+```{r}
+# Make sure to filter all ADC sums less than 400 ADC 
+
+sim_data <- sim_data %>% filter(ADC_sum>400)
+
+```
+
+
+
+```{r}
+# Get the trd signals from our MC data 
+
+signals <- get_TRD_signals(sim_data)
+```
+
+```{r}
+# Lets save this for safety !
+save(signals, file = "Signals.RData")
+```
+
+
+
+## ADC time bin sum distribution for extracted signals 
+
+
+```{r}
+
+ggplot(signals, aes(x=ADC_sum %>% log10())) + 
+  stat_bin(col="red", geom = "step") + 
+  labs(x="log(ADC Sum)", title = "ADC Sum Dist for TRD signals")+
+  theme_pubr(border = T)
+
+```
+## ADC time bin sum distribution for un-extracted data 
+
+```{r}
+ggplot(sim_data, aes(x=ADC_sum %>% log10())) + 
+  stat_bin(col="blue", geom = "step") + 
+  labs(x="log(ADC Sum)", title = "ADC Sum Dist (without signal extraction)")+
+  theme_pubr(border = T)
+```
+
+```{r}
+ggplot() + 
+  stat_bin(data=signals, aes(x=ADC_sum %>% log10(),col="red"), geom = "step") +
+  stat_bin(data=sim_data, aes(x=ADC_sum %>% log10(), col="blue"), geom = "step")+
+  labs(x="log(ADC Sum)", title = "ADC Sum Distribution Comparison")+
+  scale_color_identity(guide = "legend")+
+  scale_color_identity(name = "",
+                          breaks = c("red", "blue"),
+                          labels = c("signals", "non signals"),
+                          guide = "legend") + 
+  theme(legend.position = c(0.8, 0.2))+
+   
+  theme_pubr(border = T)
+```
+
+
+```{r}
+ggplot() + 
+  stat_bin(data=signals, aes(x=ADC_sum %>% log10(),col="red"), geom = "step") +
+  stat_bin(data=raw_data, aes(x=ADC_sum %>% log10(), col="blue"), geom = "step")+
+  labs(x="log(ADC Sum)", title = "ADC Sum Distribution Comparison")+
+  scale_color_identity(guide = "legend")+
+  scale_color_identity(name = "",
+                          breaks = c("red", "blue"),
+                          labels = c("signals", "noisy data"),
+                          guide = "legend") +
+   
+  theme_pubr(border = T)
+```
+
+
+
+```{r}
+ggplot() + 
+  stat_bin(data=signals, aes(x=ADC_sum,col="red"), geom = "step", bins=50) +
+  stat_bin(data=raw_data, aes(x=ADC_sum, col="blue"), geom = "step", bins=50)+
+  labs(x="(ADC Sum)", title = "ADC Sum Distribution Comparison")+
+  scale_color_identity(guide = "legend")+
+  scale_color_identity(name = "",
+                          breaks = c("red", "blue"),
+                          labels = c("signals", "noisy data"),
+                          guide = "legend") +
+  scale_x_log10() + 
+   
+  theme_pubr(border = T)
+```
+
+
+
+
+```{r}
+fe_signals <- signals %>% mutate(SM = detector %/% 30, 
+                                 Time_Bin_Sum= 0)
+```
+
+```{r}
+fe_signals$Time_Bin_Sum[seq(1, nrow(fe_signals), 4)] <- c("low neighbour")
+fe_signals$Time_Bin_Sum[seq(2, nrow(fe_signals), 4)] <- c("maximum")
+fe_signals$Time_Bin_Sum[seq(3, nrow(fe_signals), 4)] <- c("High neighbour")
+fe_signals$Time_Bin_Sum[seq(4, nrow(fe_signals), 4)] <- c("High neighbour's neighbour")
+```
+
+
+```{r}
+fe_signals$Time_Bin_Sum <- as.factor(fe_signals$Time_Bin_Sum)
+```
+
+
+```{r}
+ggplot(fe_signals) + 
+  stat_bin(aes(x=ADC_sum, col=Time_Bin_Sum), geom="step", bins = 50) + 
+  stat_bin(aes(x=ADC_sum), geom="step", bins = 50) +
+  labs(x="ADC sum", col="")+
+  scale_x_log10() + 
+  theme_pubr(border = T)
+  
+```
+
+```{r}
+ggplot() + 
+  
+  stat_bin(data=fe_signals %>% filter(Time_Bin_Sum=="low neighbour"), aes(x=ADC_sum), col="blue", geom = "step", bins = 50) + 
+  stat_bin(data=fe_signals %>% filter(Time_Bin_Sum=="maximum"), aes(x=ADC_sum), col="red", geom = "step", bins = 50) + 
+  stat_bin(data=fe_signals %>% filter(Time_Bin_Sum=="High neighbour"), aes(x=ADC_sum), col="green", geom = "step", bins = 50) + 
+  stat_bin(data=fe_signals %>% filter(Time_Bin_Sum=="High neighbour's neighbour"), aes(x=ADC_sum), col="violet", geom = "step", bins = 50) + 
+  stat_bin(data=fe_signals, aes(x=ADC_sum), col="black", geom = "step", bins = 50) + 
+  scale_x_log10() + 
+  
+  theme_pubr(border = T)
+```
+
+
+
+
+
+```{r}
+ggplot() + 
+  
+  stat_bin(data=fe_signals %>% filter(Time_Bin_Sum=="low neighbour"), aes(x=ADC_sum, col="blue"), geom = "step", bins = 50) + 
+  stat_bin(data=fe_signals %>% filter(Time_Bin_Sum=="maximum"), aes(x=ADC_sum, col="red"), geom = "step", bins = 50) + 
+  stat_bin(data=fe_signals %>% filter(Time_Bin_Sum=="High neighbour"), aes(x=ADC_sum, col="green"), geom = "step", bins = 50) + 
+  stat_bin(data=fe_signals %>% filter(Time_Bin_Sum=="High neighbour's neighbour"), aes(x=ADC_sum, col="violet"), geom = "step", bins = 50) + 
+  stat_bin(data=fe_signals, aes(x=ADC_sum, col="black"), geom = "step", bins = 50) + 
+  scale_x_log10() + 
+  
+  theme_pubr(border = T)
+```
+
+
+
+```{r}
+ggplot(fe_signals %>% group_by(SM), aes(x=ADC_sum)) + 
+  stat_bin(geom="step", col="purple", bins=50) +
+  scale_x_log10() + 
+  facet_wrap(~SM) + 
+  theme_pubr(border = T)
+```
+```{r}
+def_signals_long <- long_form(fe_signals)
+```
+
+```{r}
+avg_ph <- def_signals_long %>% group_by(timebin) %>% 
+  summarise(mean_adc = mean(value, na.rm=T)) 
+avg_ph
+```
+
+```{r}
+def_signals_long %>% group_by(value , timebin) %>% count() %>% 
+  ggplot() + 
+  geom_tile(aes(x=timebin, y=value, fill=n/3), na.rm = T) + 
+  scale_fill_viridis_c() + 
+  theme_bw()
+```
+```{r}
+fe_signals$detector %>% unique() %>% sort()
+```
+```{r}
+# Lets choos det 9 , which padrows are there for this 
+
+fe_signals$padrow[fe_signals$detector==9] %>% unique() %>% sort()
+```
+```{r}
+data_sub <- fe_signals %>% filter(detector==9, padrow==7)
+data_sub
+```
+
+```{r}
+data_sub2 <- def_signals_long %>% filter(detector==9, padrow==7)
+data_sub2
+```
+
+```{r}
+hmap(def_signals_long, 9, 7, 1, 4)
+```
+```{r}
+p1 <- hmap(data_sub2, 9, 7, 1, 4)
+p2 <- hmap(data_sub2, 9, 7, 22, 25)
+p3 <- hmap(data_sub2, 9, 7, 28, 31)
+p4 <- hmap(data_sub2, 9, 7, 33, 36)
+p5 <- hmap(data_sub2, 9, 7, 49, 52)
+p6 <- hmap(data_sub2, 9, 7, 99, 102)
+
+ggarrange(p1,p2,p3,p4, p5, p6)
+```
+
+```{r}
+sub1 <- sim_data %>% filter(detector==9, padrow==7) 
+sub1
+```
+
+```{r}
+ggplot(sub1, aes(x=pad, y=ADC_sum)) + geom_point() + geom_line(col="red") + theme_pubr(border=T)
+```
+```{r}
+sub1_f <- sub1 %>% fill()
+sub1_f
+```
+```{r}
+ggplot(sub1_f, aes(x=pad, y=ADC_sum)) + 
+  geom_point() + 
+  geom_line(col="red") + 
+  theme_pubr(border = T)
+```
+
+```{r}
+sub1_f_m <- local_max(sub1_f)
+sub1_f_m
+```
+
+```{r}
+ggplot() + 
+  geom_point(data = sub1_f, aes(x=pad, y=ADC_sum)) + 
+  geom_line(data = sub1_f, aes(x=pad, y=ADC_sum), col="red") + 
+  geom_vline(data=sub1_f_m[seq(2, nrow(sub1_f_m), 4), ], aes(xintercept = pad), col="blue", lty=2) +
+  theme_pubr(border = T)
+```
+
