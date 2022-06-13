@@ -1,6 +1,6 @@
 
 # some tools for plotting and visualization 
-
+# Also to pivot into long format 
 
 # Function to convert data into long form for plotting 
 
