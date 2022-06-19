@@ -52,20 +52,14 @@ long_form <- function(df){
 
 
 #-------------------------------------------------------------------------------
+# now we need to develop a function to plot the images 
+# In this first function we assume the data is already in condensed form where each row is an image 
 
 
-# This isn't really necessary since we dont actually need the pad nums
-# But it is defintitely a start for visualizing heatmaps 
-
-# Heat map plots 
-# this take a dataframe in LONG FORM AS INPUT 
-hmap <- function(df, Det, row, ps, pe){
-  
-  df  %>% filter(detector==Det ,padrow==row, between(pad, ps, pe)) %>% 
-    ggplot() +
-    geom_raster(aes(x=timebin, y=pad, fill=value)) + 
-    ggtitle(paste("Det: ",Det ,"padrow: ", row )) +
-    scale_fill_viridis_c() 
+sigplot <- function(df) {
   
   
 }
+
+
+
