@@ -54,7 +54,7 @@ long_form <- function(df){
 #-------------------------------------------------------------------------------
 
 
-# This may not be as efficient but its a start 
+# This wasn't necessary after all 
 
 # Heat map plots 
 # this take a dataframe in LONG FORM AS INPUT 
