@@ -54,7 +54,8 @@ long_form <- function(df){
 #-------------------------------------------------------------------------------
 
 
-
+# This isn't really necessary since we dont actually need the pad nums
+# But it is defintitely a start for visualizing heatmaps 
 
 # Heat map plots 
 # this take a dataframe in LONG FORM AS INPUT 
