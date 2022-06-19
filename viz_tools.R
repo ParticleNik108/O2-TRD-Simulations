@@ -55,7 +55,7 @@ long_form <- function(df){
 
 
 # This wasn't necessary after all 
-
+# Turns out the individual pad numbers weren't required 
 # Heat map plots 
 # this take a dataframe in LONG FORM AS INPUT 
 hmap <- function(df, Det, row, ps, pe){
