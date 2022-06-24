@@ -14,5 +14,8 @@ condensed data both image heatmaps and just the average signal on its own.
 The Distributiontools.R file assists with producing histograms concerning the
 mean ADC, ADC sums etc for condensed data. 
 
+We have commented out some unecessary conditionals in the TRD signal extractor code.
+We have also incorporated the Supermodule info into the Condensed dataframe.
+
 
 
