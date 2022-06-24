@@ -8,6 +8,7 @@ library(ggplot2)
 library(gridExtra)
 library(ggpubr)
 library(cowplot)
+library(patchwork)
 
 
 
@@ -47,7 +48,7 @@ sample_signals <- function(df, nb = 6) {
   
   
   
-  plotgrids <- grid.arrange(p1, p2, p3, p4, ncol=2)
+  plotgrids <- (p1 + p2)/(p3+p4)/(p5+p6)
   
   #plotgrids <- plot_grid(plotlist = c(p1,p2, p3, p4, p5, p6), ncol = 2)
   
@@ -55,4 +56,17 @@ sample_signals <- function(df, nb = 6) {
   return(plotgrids)
   
 }
+
+
+
+# Save the plot ! 
+# -----------
+
+#ggsave("TRD_signals_6.png",
+ #      plot = sample_signals(pion_pics),
+  #     width = 9, height = 6)
+
+
+
+
   
