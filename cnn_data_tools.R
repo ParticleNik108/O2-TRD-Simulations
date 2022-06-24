@@ -34,10 +34,29 @@ cnames <- c("adc_0", "adc_1", "adc_2", "adc_3", "adc_4",
 
 
 
+# Devise more meaningful variable names so that the columns make sense in condensed forms
+# The first 30 cols will be the low neighbors, the next 30 the max, the next 30 the High Neighbors and so on !
+
+LNnames <- c()
+Maxnames <- c()
+HNnames <- c()
+HNNnames <- c()
+# Or lets do this in a more swifter way
+for(i in c(1:30)) {
+  LNnames[i] <- paste0("LNT",i)
+  Maxnames[i] <- paste0("MT",i)
+  HNnames[i] <- paste0("HNT",i)
+  HNNnames[i] <- paste0("HNNT",i)
+  
+}
+
+Neighbornames <- c(LNnames, Maxnames, HNnames, HNNnames) 
+# We will make these the col names for our condensed df instead of the default v1, v2, ... v120
+
+
 
 # Now create a function to grab batches of matrices and condense them in a nice
 # Data frame 
-
 
 #------------------------------------------------------------------------------
 
@@ -53,6 +72,9 @@ condense <- function(df) {
   brks <- seq(1, nrow(dfn), 4)  # step in 4 
   
   
+  # Get the supermodule array to cbind after for loop, make into factors to facet later on for plots
+  SM = df$sm[brks] %>% as.factor()
+  
   # Now create empty vector to store matrix lists 
   vlm <- vector()
   # loop through the breaks to grab our batches an condense them
@@ -66,8 +88,15 @@ condense <- function(df) {
   # reshape into dimension of c(length(vlm), nrow*ncol of single matrix)
   vlm <- vlm %>% array_reshape(dim = c(length(vlm), 120)) %>% as.data.frame()
   
+  # Now renames columns with our Neighbornames 
+  names(vlm) <- Neighbornames
+  
+  # Cbind the SM information vector 
+  
+  vlm <- cbind.data.frame(vlm, SM)
+  
   # Return the condensed dataframe
-  return(vlm )
+  return(vlm)
   
   
 }
