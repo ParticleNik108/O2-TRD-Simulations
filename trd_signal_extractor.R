@@ -120,6 +120,9 @@ local_max <- function(df){
 
 get_TRD_signals <- function(df){
   
+  # First filter the data 
+  df <- df %>% filter(ADC_sum>400, is_shared=="False")
+  
   # create empty dataframe to store all the signals only 
   trd_sigs <- data.frame()
   
