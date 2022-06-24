@@ -66,29 +66,29 @@ local_max <- function(df){
     
     # condition for local max (satisfied)
     if(dhi<0 & dlow>0){
-      maxima <- append(maxima, df$ADC_sum[p])
-      mpos <- append(mpos,p)
+      #maxima <- append(maxima, df$ADC_sum[p])
+      #mpos <- append(mpos,p)
       
       
       if(p==1){next
         #low <- append(low, 0)
         #lpos <- append(lpos, NA)
-      }else{
-        low <- append(low, df$ADC_sum[p-1])
-        lpos <- append(lpos, p-1)
-      }
+      }#else{
+        #low <- append(low, df$ADC_sum[p-1])
+        #lpos <- append(lpos, p-1)
+      #}
       
       if(p==L){next
         #high <- append(high,0)
         #hpos <- append(hpos, NA)
         #Hnn <- append(Hnn, 0)
         #Hnnpos <- append(Hnnpos, NA)
-      }else{
-        high <- append(high,df$ADC_sum[p+1])
-        hpos <- append(hpos, p+1)
-        Hnn <- append(Hnn, df$ADC_sum[p+2])
-        Hnnpos <- append(Hnnpos, p+2)
-      }
+      }#else{
+        #high <- append(high,df$ADC_sum[p+1])
+        #hpos <- append(hpos, p+1)
+        #Hnn <- append(Hnn, df$ADC_sum[p+2])
+        #Hnnpos <- append(Hnnpos, p+2)
+      #}
       
       # add the events to our dataframe 
       event <- rbind.data.frame(event, df[c(p-1, p, p+1, p+2), ] )
