@@ -149,6 +149,8 @@ get_TRD_signals <- function(df){
     }
   }
   
+  
+  trd_sigs <- trd_sigs %>% mutate(SM = detector %/% 30)
   # return a dataframe with our extracted trd signals ! :) 
   return(trd_sigs)
   
