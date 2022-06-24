@@ -52,6 +52,7 @@ long_form <- function(df){
 
 
 #-------------------------------------------------------------------------------
+<<<<<<< HEAD
 # now we need to develop a function to plot the images 
 # In this first function we assume the data is already in condensed form where each row is an image 
 
@@ -63,3 +64,21 @@ sigplot <- function(df) {
 
 
 
+=======
+
+
+
+
+# Heat map plots 
+# this take a dataframe in LONG FORM AS INPUT 
+hmap <- function(df, Det, row, ps, pe){
+  
+  df  %>% filter(detector==Det ,padrow==row, between(pad, ps, pe)) %>% 
+    ggplot() +
+    geom_raster(aes(x=timebin, y=pad, fill=value)) + 
+    ggtitle(paste("Det: ",Det ,"padrow: ", row )) +
+    scale_fill_viridis_c() 
+  
+  
+}
+>>>>>>> 1bb1b07f5d37f0cd0fe6e28a09b0b99adda3ccd5
