@@ -18,32 +18,32 @@ sample_signals <- function(df, nb = 6) {
   
   p1 <- df[samps[1],,] %>% melt() %>% ggplot(aes(x=Var2, y=Var1, fill=value)) + geom_tile() + 
     scale_fill_viridis_c() +
-    labs(x="Timebin", y="Pads") + theme_bw() + 
+    labs(x="Timebin", y="Pads", fill="ADC\nvalue") + theme_bw() + 
     theme(axis.text.y = element_blank() ) 
   
   p2 <- df[samps[2],,] %>% melt() %>% ggplot(aes(x=Var2, y=Var1, fill=value)) + geom_tile() + 
     scale_fill_viridis_c() +
-    labs(x="Timebin", y="Pads") + theme_bw() + 
+    labs(x="Timebin", y="Pads", fill="ADC\nvalue") + theme_bw() + 
     theme(axis.text.y = element_blank() ) 
   
   p3 <- df[samps[3],,] %>% melt() %>% ggplot(aes(x=Var2, y=Var1, fill=value)) + geom_tile() + 
     scale_fill_viridis_c() +
-    labs(x="Timebin", y="Pads") + theme_bw() + 
+    labs(x="Timebin", y="Pads", fill="ADC\nvalue") + theme_bw() + 
     theme(axis.text.y = element_blank() ) 
   
   p4 <- df[samps[4],,] %>% melt() %>% ggplot(aes(x=Var2, y=Var1, fill=value)) + geom_tile() + 
     scale_fill_viridis_c() +
-    labs(x="Timebin", y="Pads") + theme_bw() + 
+    labs(x="Timebin", y="Pads", fill="ADC\nvalue") + theme_bw() + 
     theme(axis.text.y = element_blank() ) 
   
   p5 <- df[samps[5],,] %>% melt() %>% ggplot(aes(x=Var2, y=Var1, fill=value)) + geom_tile() + 
     scale_fill_viridis_c() +
-    labs(x="Timebin", y="Pads") + theme_bw() + 
+    labs(x="Timebin", y="Pads", fill="ADC\nvalue") + theme_bw() + 
     theme(axis.text.y = element_blank() ) 
   
   p6 <- df[samps[6],,] %>% melt() %>% ggplot(aes(x=Var2, y=Var1, fill=value)) + geom_tile() + 
     scale_fill_viridis_c() +
-    labs(x="Timebin", y="Pads") + theme_bw() + 
+    labs(x="Timebin", y="Pads", fill="ADC\nvalue") + theme_bw() + 
     theme(axis.text.y = element_blank() ) 
   
   
