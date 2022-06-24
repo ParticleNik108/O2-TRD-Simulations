@@ -111,8 +111,8 @@ condense <- function(df) {
 
 cnn_preprocess <- function(df){
   
-  # convert dataframe to matrix first
-  dfmat <- df %>% as.matrix(dimnames=NULL)
+  # convert dataframe to matrix first, removing the SM column
+  dfmat <- df[, -c("SM")] %>% as.matrix(dimnames=NULL)
   
   # Reshape into 4 x 30 matrices  
   # dim = c(nrow(df), 4, 30)
