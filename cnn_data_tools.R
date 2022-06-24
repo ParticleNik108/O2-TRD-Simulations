@@ -73,7 +73,7 @@ condense <- function(df) {
   
   
   # Get the supermodule array to cbind after for loop, make into factors to facet later on for plots
-  SM = df$sm[brks] %>% as.factor()
+  SM = df$SM[brks] %>% as.factor()
   
   # Now create empty vector to store matrix lists 
   vlm <- vector()
